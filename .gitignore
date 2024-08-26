@@ -1,4 +1,8 @@
 venv/
 __pycache__/
 *.pyc
+<<<<<<< HEAD
 .DS_Store
+=======
+.DS_Store
+>>>>>>> 87bf256f482c2a208d014315a29f74e896b79063
