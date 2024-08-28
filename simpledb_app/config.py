@@ -1,7 +1,7 @@
 import os
 
 class Config:
-    SQLALCHEMY_DATABASE_URI = 'postgresql://databasetest_guv7_user:zjrvahyjGtNb4uuyqdpN577WkReUD9H8@dpg-cr6ubmi3esus7393hhlg-a.oregon-postgres.render.com/databasetest_guv7'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://admin:tesT!01@localhost:5432/simpledb'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     MAIL_SERVER = 'smtp.office365.com'
     MAIL_PORT = 587
