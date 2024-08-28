@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questions</title>
+</head>
+<body>
+    <h1>Questions</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.favorite_food.label }}
+            {{ form.favorite_food() }}
+        </div>
+        <div>
+            {{ form.favorite_artist.label }}
+            {{ form.favorite_artist() }}
+        </div>
+        <div>
+            {{ form.favorite_place.label }}
+            {{ form.favorite_place() }}
+        </div>
+        <div>
+            {{ form.favorite_color.label }}
+            {{ form.favorite_color() }}
+        </div>
+        <div>
+            {{ form.submit() }}
+        </div>
+    </form>
+    <a href="{{ url_for('logout') }}">Logout</a>.
+</body>
+</html>

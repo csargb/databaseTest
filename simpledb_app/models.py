@@ -1,10 +1,17 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 #from sqlalchemy.sql import func
 
+
 db = SQLAlchemy()
 
-class User(db.Model):
+
+login_manager = LoginManager()
+login_manager.login_view = '/login/'
+
+
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text, nullable=False)
     lastname = db.Column(db.Text, nullable=False)
@@ -23,9 +30,14 @@ class User(db.Model):
         return check_password_hash(self.password_hash, password)
 
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
 class Questions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    favorite_food = db.Column(db.String(100), nullable=False)
-    favorite_artist = db.Column(db.String(100), nullable=False)
-    favorite_place = db.Column(db.String(100), nullable=False)
-    favorite_color = db.Column(db.String(100), nullable=False)
+    favorite_food = db.Column(db.Text, nullable=False)
+    favorite_artist = db.Column(db.Text, nullable=False)
+    favorite_place = db.Column(db.Text, nullable=False)
+    favorite_color = db.Column(db.Text, nullable=False)

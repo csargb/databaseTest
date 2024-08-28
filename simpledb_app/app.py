@@ -6,6 +6,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo
+from flask_migrate import Migrate
+from flask_login import login_user, login_required, logout_user, current_user
 from models import db, User, Questions
 
 
@@ -16,6 +18,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
 db.init_app(app)
+
+
+migrate = Migrate(app, db)
 
 
 class RegistrationForm(FlaskForm):
@@ -38,6 +43,7 @@ class QuestionsForm(FlaskForm):
     favorite_artist = StringField('Favorite artist', validators=[DataRequired()])
     favorite_place = StringField('Favorite place', validators=[DataRequired()])
     favorite_color = StringField('Favorite color', validators=[DataRequired()])
+    submit = SubmitField('Save answers')
 
 
 @app.route('/')
@@ -56,7 +62,8 @@ def login():
         user = User.query.filter_by(email=email).first()
 
         if user and user.check_password(password):
-            return 'Logged in successfully!'
+            login_user(user)
+            return redirect(url_for('questions'))
         else:
             return 'Invalid username or password.'
         
@@ -88,8 +95,9 @@ def register():
     return render_template('register.html', form=form)
 
 
-@app.route('/preguntas/', methods=['GET', 'POST'])
-def preguntas():
+@app.route('/questions/', methods=['GET', 'POST'])
+@login_required
+def questions():
     form = QuestionsForm()
     if form.validate_on_submit():
         favorite_food = form.favorite_food.data
@@ -100,4 +108,16 @@ def preguntas():
         #Create record
         questions = Questions(favorite_food=favorite_food, favorite_artist=favorite_artist, favorite_place=favorite_place, favorite_color=favorite_color)
 
-    return render_template('preguntas.html', form=form)
+        db.session.add(questions)
+        db.session.commit()
+
+        return redirect(url_for('dashboard'))
+
+    return render_template('questions.html', form=form)
+
+
+@app.route('/logout/', methods=['GET', 'POST'])
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
