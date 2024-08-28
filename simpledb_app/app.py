@@ -8,7 +8,7 @@ from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo
 from flask_migrate import Migrate
 from flask_login import login_user, login_required, logout_user, current_user
-from models import db, User, Questions
+from models import db, login_manager, User, Questions
 
 
 app = Flask(__name__)
@@ -18,6 +18,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
 db.init_app(app)
+login_manager.init_app(app)
 
 
 migrate = Migrate(app, db)
@@ -104,6 +105,7 @@ def questions():
         favorite_artist = form.favorite_artist.data
         favorite_place = form.favorite_place.data
         favorite_color = form.favorite_color.data
+        user_id = current_user.id
 
         #Create record
         questions = Questions(favorite_food=favorite_food, favorite_artist=favorite_artist, favorite_place=favorite_place, favorite_color=favorite_color)
@@ -111,7 +113,7 @@ def questions():
         db.session.add(questions)
         db.session.commit()
 
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('display'))
 
     return render_template('questions.html', form=form)
 
@@ -120,4 +122,13 @@ def questions():
 @login_required
 def logout():
     logout_user()
+
     return redirect(url_for('login'))
+
+
+@app.route('/records/', methods=['GET', 'POST'])
+@login_required
+def display():
+    Questions.query.add_column(favorite_food='Pizza')
+
+    return render_template('records.html')

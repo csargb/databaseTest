@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Your Records</title>
 </head>
 <body>
-    <h1>Dashboard</h1>
+    <h1>List of records</h1>
     <p>Welcome, {{ current_user.nombre }}!</p>
     <p>Your favorite food: {{ current_user.favorite_food }}</p>
     <p>Your favorite artist: {{ current_user.favorite_artist }}</p>
     <p>Your favorite place: {{ current_user.favorite_place }}</p>
     <p>Your favorite color: {{ current_user.favorite_color }}</p>
 
-    <p><a href="{{ url_for('auth.logout') }}">Logout</a></p>
+    <a href="{{ url_for('logout') }}">Logout</a>
 </body>
 </html>

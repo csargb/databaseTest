@@ -41,3 +41,11 @@ class Questions(db.Model):
     favorite_artist = db.Column(db.Text, nullable=False)
     favorite_place = db.Column(db.Text, nullable=False)
     favorite_color = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __init__(self, favorite_food, favorite_artist, favorite_place, favorite_color, user_id):
+        self.favorite_food = favorite_food
+        self.favorite_artist = favorite_artist
+        self.favorite_place = favorite_place
+        self.favorite_color = favorite_color
+        self.user_id = user_id
